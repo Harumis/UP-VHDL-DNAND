@@ -47,17 +47,41 @@ component impuls is
 	Port ( Clk_div, T : in STD_LOGIC;
 			 C : buffer STD_LOGIC);
 end component impuls;
-component NAND4 is 
-	Port ( a,b,c,d : in STD_LOGIC := '1';
+component NAND3 is 
+	Port ( a,b,c : in STD_LOGIC := '1';
 			 z : out STD_LOGIC);
-end component NAND4;
+end component NAND3;
+component NOT1 is 
+	Port ( a : in STD_LOGIC := '1';
+			 z : out STD_LOGIC);
+end component NOT1;	
+component NAND2 is 
+	Port ( a,b : in STD_LOGIC := '1';
+			 z : out STD_LOGIC);
+end component NAND2;	
 component FFD is
 	Port ( D, C, R : in STD_LOGIC;
 			 Q, nQ : out STD_LOGIC);
 end component FFD;
-signal Clk_div,C,nx,Q1,Q2,nQ1,nQ2,v1,v2,v3,v4,D1,D2 : STD_LOGIC;
+signal Clk_div,C, nx, q1,q2,nq1,nq2, v1,v2,v3,v4,v5,v6,zn1,zn2 D1,D2: STD_LOGIC;
 begin
 
-
-end Behavioral;
+c1: divider port map (Clk, Clk_div);
+c2: impuls port map (Clk_div, T, C); 
+b0: NAND4 port map (a => x, z => nx);
+b1: NAND2 port map (nq1,nx,v1);
+b2: NAND2 port map (nq1,nq2,v2);
+b3: NAND3 port map (q1,q2,x,v3);
+b4: NAND3 port map (v1,v2,v3,D1);
+b5: NAND2 port map (nq1,q2,v4);
+b6: NAND2 port map (nq1,x,v5);
+b7: NAND3 port map (q1,nq2,nx,v6);
+b8: NAND3 port map (v4,v5,v6,D2);
+p1: FFD port map (D1, C, R, Q1, nQ1);
+p2: FFD port map (D2, C, R, Q2, nQ2);
+b9: NAND2 port map (q1,q2,zn1);
+b10: NAND2 port map (nq1,q2,zn2);
+a0: NOT1 port map (zn1,z1);
+a1: NOT1 port map (zn2,z2);
+end Behavioral; 
 
